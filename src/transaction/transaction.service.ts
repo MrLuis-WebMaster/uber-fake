@@ -7,7 +7,7 @@ import { createReference } from '../libs/utils/createReference.util';
 import { createSignature } from '../libs/utils/createSignature.util';
 
 @Injectable()
-export class WompiService {
+export class TransactionService {
   constructor(
     @Inject(forwardRef(() => RiderService))
     private readonly riderService: RiderService,

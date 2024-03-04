@@ -3,12 +3,12 @@ import { RiderModule } from './rider/rider.module';
 import { DriverModule } from './driver/driver.module';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from './core/database/database.module';
-import { WompiService } from './wompi/wompi.service';
+import { TransactionService } from './transaction/transaction.service';
 import { UserService } from './user/user.service';
 import { RiderService } from './rider/rider.service';
 import { DriverService } from './driver/driver.service';
 import { ConfigModule } from '@nestjs/config';
-import { WompiModule } from './wompi/wompi.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -17,8 +17,8 @@ import { WompiModule } from './wompi/wompi.module';
     RiderModule,
     UserModule,
     DriverModule,
-    WompiModule,
+    TransactionModule,
   ],
-  providers: [WompiService, UserService, RiderService, DriverService],
+  providers: [TransactionService, UserService, RiderService, DriverService],
 })
 export class AppModule {}

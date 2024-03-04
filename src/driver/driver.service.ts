@@ -76,11 +76,12 @@ export class DriverService {
   async finishDriver(
     location: { latitude: string; longitude: string },
     driverId: number,
+    paymentSource: number,
   ): Promise<[affectedCount: number]> {
     try {
       const driverUpdated = await this.driverModel.update(
-        { id: driverId },
-        { where: { location } },
+        { location, isAvailable: true },
+        { where: { id: driverId } },
       );
 
       if (driverUpdated[0] === 0) {
@@ -90,12 +91,13 @@ export class DriverService {
       }
 
       await this.riderModel.update(
-        { driverId },
-        { where: { paymentSource: null, driverId: null } },
+        { paymentSource: null },
+        { where: { paymentSource, driverId } },
       );
 
       return driverUpdated;
     } catch (error) {
+      console.log(error);
       throw new BadRequestException('Error al finalizar el conductor.');
     }
   }

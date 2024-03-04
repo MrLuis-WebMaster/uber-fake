@@ -90,19 +90,21 @@ describe('RiderService', () => {
     });
   });
 
-  describe('getUserByDriverId', () => {
+  describe('getUserByDriverIdAndCheckingPaymentSource', () => {
     it('should return rider with user when found', async () => {
       const mockRider = { id: 1, driverId: 1, user: { id: 1 } };
       mockRiderEntity.findOne.mockResolvedValue(mockRider);
 
-      const result = await service.getUserByDriverId(1);
+      const result = await service.getUserByDriverIdAndCheckingPaymentSource(1);
       expect(result).toEqual(mockRider);
     });
 
     it('should throw NotFoundException if rider not found', async () => {
       mockRiderEntity.findOne.mockResolvedValue(null);
 
-      await expect(service.getUserByDriverId(1)).rejects.toThrowError(
+      await expect(
+        service.getUserByDriverIdAndCheckingPaymentSource(1),
+      ).rejects.toThrowError(
         new NotFoundException('Rider with driver ID 1 not found.'),
       );
     });
@@ -114,7 +116,9 @@ describe('RiderService', () => {
         user: null,
       });
 
-      await expect(service.getUserByDriverId(1)).rejects.toThrowError(
+      await expect(
+        service.getUserByDriverIdAndCheckingPaymentSource(1),
+      ).rejects.toThrowError(
         new NotFoundException('User not found for rider with driver ID 1.'),
       );
     });

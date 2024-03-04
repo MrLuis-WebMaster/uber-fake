@@ -3,6 +3,7 @@ import { RiderEntity } from './rider.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserEntity } from '../user/user.entity';
 import { DriverEntity } from '../driver/driver.entity';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class RiderService {
@@ -36,13 +37,16 @@ export class RiderService {
     }
     rider.driverId = driver.id;
     driver.location = location;
+    driver.isAvailable = false;
     await rider.save();
     await driver.save();
     return rider;
   }
-  async getUserByDriverId(driverId: number): Promise<RiderEntity> {
+  async getUserByDriverIdAndCheckingPaymentSource(
+    driverId: number,
+  ): Promise<RiderEntity> {
     const rider = await this.riderEntity.findOne({
-      where: { driverId },
+      where: { driverId, paymentSource: { [Op.not]: null } },
       include: [UserEntity],
     });
 

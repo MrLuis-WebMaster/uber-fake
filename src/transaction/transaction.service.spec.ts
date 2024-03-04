@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WompiService } from './wompi.service';
+import { TransactionService } from './transaction.service';
 import { RiderService } from '../rider/rider.service';
 import { UserService } from '../user/user.service';
 
@@ -11,13 +11,13 @@ const mockUserService = {
   getUserByEmailAndRoleRider: jest.fn(),
 };
 
-describe('WompiService', () => {
-  let service: WompiService;
+describe('TransactionService', () => {
+  let service: TransactionService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        WompiService,
+        TransactionService,
         {
           provide: RiderService,
           useValue: mockRiderService,
@@ -29,7 +29,7 @@ describe('WompiService', () => {
       ],
     }).compile();
 
-    service = module.get<WompiService>(WompiService);
+    service = module.get<TransactionService>(TransactionService);
   });
 
   it('should be defined', () => {

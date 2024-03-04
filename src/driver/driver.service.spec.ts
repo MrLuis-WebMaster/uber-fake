@@ -3,7 +3,6 @@ import { getModelToken } from '@nestjs/sequelize';
 import { DriverService } from './driver.service';
 import { DriverEntity } from './driver.entity';
 import { RiderEntity } from '../rider/rider.entity';
-import { BadRequestException } from '@nestjs/common';
 
 jest.mock('./driver.entity');
 const mockDriverEntity = DriverEntity as jest.Mocked<typeof DriverEntity>;
@@ -102,31 +101,22 @@ describe('DriverService', () => {
     it('should finish the driver request and update rider and driver', async () => {
       const mockLocation = { latitude: '12.36', longitude: '56.80' };
       const mockRiderId = 1;
+      const mockPaymentSource = 123;
 
-      mockRiderEntity.update(
-        { driverId: mockRiderId },
-        { where: { paymentSource: null, driverId: null } },
-      );
-      mockDriverEntity.update(
-        { id: mockRiderId },
-        { where: { location: mockLocation } },
-      );
-
-      mockDriverEntity.update.mockRejectedValue(
-        new BadRequestException('Error al finalizar el conductor.'),
-      );
+      mockDriverEntity.update.mockResolvedValue([1]);
+      mockRiderEntity.update.mockResolvedValue([1]);
 
       await expect(
-        service.finishDriver(mockLocation, mockRiderId),
-      ).rejects.toThrowError(BadRequestException);
+        service.finishDriver(mockLocation, mockRiderId, mockPaymentSource),
+      ).resolves.toEqual([1]);
 
       expect(mockRiderEntity.update).toHaveBeenCalledWith(
-        { driverId: mockRiderId },
-        { where: { paymentSource: null, driverId: null } },
+        { paymentSource: null },
+        { where: { paymentSource: mockPaymentSource, driverId: mockRiderId } },
       );
       expect(mockDriverEntity.update).toHaveBeenCalledWith(
-        { id: mockRiderId },
-        { where: { location: mockLocation } },
+        { location: mockLocation, isAvailable: true },
+        { where: { id: mockRiderId } },
       );
     });
   });

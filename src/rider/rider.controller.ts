@@ -1,13 +1,13 @@
 import { Body, Controller, Post, HttpException } from '@nestjs/common';
 import { RequestDto } from './dto/request.dto';
-import { WompiService } from '../wompi/wompi.service';
+import { TransactionService } from '../transaction/transaction.service';
 import { RiderService } from './rider.service';
 import { DriverService } from '../driver/driver.service';
 
 @Controller('rider')
 export class RiderController {
   constructor(
-    private readonly wompiService: WompiService,
+    private readonly TransactionService: TransactionService,
     private readonly riderService: RiderService,
     private readonly driverService: DriverService,
   ) {}
@@ -15,7 +15,7 @@ export class RiderController {
   @Post('request')
   async requestDriver(@Body() requestDto: RequestDto) {
     try {
-      const rider = await this.wompiService.savePaymentSource(
+      const rider = await this.TransactionService.savePaymentSource(
         requestDto.token,
         requestDto.email,
       );

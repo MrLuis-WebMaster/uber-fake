@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RiderController } from './rider.controller';
-import { WompiService } from '../wompi/wompi.service';
+import { TransactionService } from '../transaction/transaction.service';
 import { RiderService } from './rider.service';
 import { DriverService } from '../driver/driver.service';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
-const mockWompiService = {
+const mockTransactionService = {
   savePaymentSource: jest.fn(),
 };
 
@@ -26,7 +26,7 @@ describe('RiderController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RiderController],
       providers: [
-        { provide: WompiService, useValue: mockWompiService },
+        { provide: TransactionService, useValue: mockTransactionService },
         { provide: RiderService, useValue: mockRiderService },
         { provide: DriverService, useValue: mockDriverService },
       ],
@@ -47,7 +47,7 @@ describe('RiderController', () => {
 
   describe('POST /rider/request', () => {
     it('should return rider data on successful request', async () => {
-      mockWompiService.savePaymentSource.mockResolvedValue({
+      mockTransactionService.savePaymentSource.mockResolvedValue({
         id: 1,
         name: 'John Doe',
       });
